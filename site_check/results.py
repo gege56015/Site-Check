@@ -1,8 +1,8 @@
 
-def output_to_terminal(results):
+def parse_to_terminal(results):
 
-    # set the initial exit code
-    exit_code = 0
+    # set the initial count of errors found
+    errors_found = 0
 
     # loop through each site result and print out the details
     for result in results:
@@ -16,10 +16,10 @@ def output_to_terminal(results):
         print('String Match Result: ' + str(result['stringfound']))
         print('Loaded In: ' + str(result['elapsed_time']) + ' seconds')
         
+        # if any of the results didn't produce a 200 response code or if the strings weren't found for every result, then add to the error count
+        if result['status_code'] != 200 or result['stringfound'] != True:
+            errors_found += 1
+            
     print('-------------------------------------------------------------')
 
-    # if any of the results didn't produce a 200 response code or if the strings weren't found for every result, then set exit code to 1
-    if result['status_code'] != 200 or result['stringfound'] != True:
-        exit_code = 1
-
-    return exit_code
+    return errors_found
